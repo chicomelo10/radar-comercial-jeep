@@ -1,50 +1,26 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { StatCard } from '@/components/dashboard/stat-card';
-import { Award, TrendingUp, Target } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 export default function MinhaPerformancePage() {
   return (
-    <div className="space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-800">Minha Performance</h1>
-        <p className="text-slate-600 mt-1">Acompanhe seu desempenho e metas</p>
+        <p className="text-slate-600 mt-1">Acompanhe seu desempenho no mês</p>
       </div>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard
-          title="Minha Pontuação"
-          value="85"
-          subtitle="Pontos no mês"
-          icon={Award}
-          variant="success"
-        />
-        <StatCard
-          title="Posição no Ranking"
-          value="2º"
-          subtitle="Entre 8 vendedores"
-          icon={TrendingUp}
-          variant="default"
-        />
-        <StatCard
-          title="Meta do Mês"
-          value="60%"
-          subtitle="3 de 5 vendas"
-          icon={Target}
-          variant="warning"
-        />
-      </div>
-
       <Card>
         <CardHeader>
-          <CardTitle>Detalhamento</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Target className="h-5 w-5" />
+            Em Desenvolvimento
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-12 text-slate-500">
-            <p className="text-lg font-medium">Recurso em Implementação</p>
-            <p className="text-sm mt-2">Análises detalhadas serão disponibilizadas em breve</p>
-          </div>
+          <p className="text-slate-600">
+            Esta página está sendo desenvolvida e em breve exibirá suas metas individuais e performance detalhada.
+          </p>
         </CardContent>
       </Card>
     </div>

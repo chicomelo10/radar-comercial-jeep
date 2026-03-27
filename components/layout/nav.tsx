@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, Building2, Users, TrendingUp, FileText, Settings, Calendar, ChartPie as PieChart } from 'lucide-react';
+import { LayoutDashboard, Building2, Users, TrendingUp, FileText, Settings, Calendar, ChartPie as PieChart, Filter, Radar } from 'lucide-react';
 
 export function Nav() {
   const { usuario } = useAuth();
@@ -17,17 +17,23 @@ export function Nav() {
   const navItems = {
     regional: [
       { href: '/dashboard', label: 'Dashboard Regional', icon: LayoutDashboard },
+      { href: '/radar', label: 'Radar Comercial', icon: Radar },
+      { href: '/funil', label: 'Funil de Vendas', icon: Filter },
       { href: '/lojas', label: 'Lojas', icon: Building2 },
       { href: '/usuarios', label: 'Usuários', icon: Users },
       { href: '/relatorios', label: 'Relatórios', icon: FileText },
+      { href: '/configuracoes-funil', label: 'Config. Funil', icon: Settings },
     ],
     gerente: [
       { href: '/dashboard', label: 'Dashboard da Loja', icon: LayoutDashboard },
+      { href: '/radar', label: 'Radar Comercial', icon: Radar },
+      { href: '/funil', label: 'Funil de Vendas', icon: Filter },
       { href: '/vendedores', label: 'Vendedores', icon: Users },
       { href: '/lancamentos', label: 'Lançamentos', icon: FileText },
       { href: '/metas', label: 'Metas', icon: TrendingUp },
       { href: '/equipe', label: 'Equipe', icon: Calendar },
       { href: '/acompanhamento', label: 'Acompanhamento', icon: PieChart },
+      { href: '/configuracoes-funil', label: 'Config. Funil', icon: Settings },
     ],
     apoio_loja: [
       { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -36,6 +42,7 @@ export function Nav() {
     ],
     vendedor: [
       { href: '/dashboard', label: 'Meu Dashboard', icon: LayoutDashboard },
+      { href: '/funil', label: 'Meu Funil', icon: Filter },
       { href: '/meu-lancamento', label: 'Meu Lançamento', icon: FileText },
       { href: '/minha-performance', label: 'Performance', icon: TrendingUp },
     ],

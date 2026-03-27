@@ -268,209 +268,217 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800">
-          {usuario?.perfil === 'regional' ? 'Dashboard Regional' : 'Dashboard da Loja'}
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-slate-800">
+          {usuario?.perfil === 'regional' ? 'Regional' : 'Dashboard'}
         </h1>
-        <p className="text-slate-600 mt-1">
-          Acompanhamento em tempo real - {new Date().toLocaleDateString('pt-BR', {
+        <p className="text-slate-500 mt-2">
+          {new Date().toLocaleDateString('pt-BR', {
             weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            month: 'long'
           })}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Firm Orders Hoje"
-          value={data.firmOrdersHoje}
-          subtitle="Vendas confirmadas"
-          icon={Award}
-          variant="success"
-        />
-        <StatCard
-          title="Faturamento Hoje"
-          value={formatCurrency(data.faturamentoHoje)}
-          subtitle="Receita do dia"
-          icon={DollarSign}
-          variant="default"
-        />
-        <StatCard
-          title="Test Drives"
-          value={data.testDrivesHoje}
-          subtitle="Realizados hoje"
-          icon={TrendingUp}
-          variant="default"
-        />
-        <StatCard
-          title="Atendimentos"
-          value={data.atendimentosHoje}
-          subtitle="Total do dia"
-          icon={Users}
-          variant="default"
-        />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <CardContent className="p-4 text-center">
+            <Award className="h-8 w-8 text-green-600 mx-auto mb-2" />
+            <div className="text-3xl font-bold text-green-900">{data.firmOrdersHoje}</div>
+            <div className="text-sm text-green-700 font-medium">Firm Orders</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <CardContent className="p-4 text-center">
+            <TrendingUp className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+            <div className="text-3xl font-bold text-purple-900">{data.testDrivesHoje}</div>
+            <div className="text-sm text-purple-700 font-medium">Test Drives</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardContent className="p-4 text-center">
+            <Users className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+            <div className="text-3xl font-bold text-blue-900">{data.atendimentosHoje}</div>
+            <div className="text-sm text-blue-700 font-medium">Atendimentos</div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
+          <CardContent className="p-4 text-center">
+            <DollarSign className="h-8 w-8 text-amber-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-amber-900">{formatCurrency(data.faturamentoHoje)}</div>
+            <div className="text-sm text-amber-700 font-medium">Faturamento</div>
+          </CardContent>
+        </Card>
       </div>
 
       {usuario?.perfil === 'regional' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            title="Lojas Verde"
-            value={data.lojasVerde}
-            subtitle="≥ 90% da meta"
-            variant="success"
-          />
-          <StatCard
-            title="Lojas Amarelo"
-            value={data.lojasAmarelo}
-            subtitle="70-89% da meta"
-            variant="warning"
-          />
-          <StatCard
-            title="Lojas Vermelho"
-            value={data.lojasVermelho}
-            subtitle="< 70% da meta"
-            variant="danger"
-          />
-          <StatCard
-            title="Pendências"
-            value={data.lojasPendentes}
-            subtitle="Lançamentos atrasados"
-            icon={AlertCircle}
-            variant="default"
-          />
+        <div className="grid grid-cols-4 gap-3">
+          <Card className="bg-green-50 border-green-300">
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold text-green-700">{data.lojasVerde}</div>
+              <div className="text-xs text-green-600">Verde</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-yellow-50 border-yellow-300">
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold text-yellow-700">{data.lojasAmarelo}</div>
+              <div className="text-xs text-yellow-600">Amarelo</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-red-50 border-red-300">
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold text-red-700">{data.lojasVermelho}</div>
+              <div className="text-xs text-red-600">Vermelho</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-50 border-slate-300">
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold text-slate-700">{data.lojasPendentes}</div>
+              <div className="text-xs text-slate-600">Pendentes</div>
+            </CardContent>
+          </Card>
         </div>
       )}
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            {usuario?.perfil === 'regional' ? 'Ranking de Lojas' : 'Ranking de Vendedores'}
+          <CardTitle className="text-center">
+            {usuario?.perfil === 'regional' ? '🏆 Ranking de Lojas' : '🏆 Ranking da Equipe'}
           </CardTitle>
         </CardHeader>
         <CardContent>
           {usuario?.perfil === 'regional' ? (
             rankingLojas.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Posição</TableHead>
-                    <TableHead>Loja</TableHead>
-                    <TableHead className="text-right">FO</TableHead>
-                    <TableHead className="text-right">Test Drives</TableHead>
-                    <TableHead className="text-right">Pontuação</TableHead>
-                    <TableHead className="text-right">% Meta</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rankingLojas.map((loja, index) => (
-                    <TableRow key={loja.id}>
-                      <TableCell className="font-bold">{index + 1}º</TableCell>
-                      <TableCell className="font-medium">{loja.nome_loja}</TableCell>
-                      <TableCell className="text-right">{loja.firm_orders}</TableCell>
-                      <TableCell className="text-right">{loja.test_drives}</TableCell>
-                      <TableCell className="text-right font-bold">{loja.pontuacao}</TableCell>
-                      <TableCell className="text-right">{loja.percentual_meta.toFixed(1)}%</TableCell>
-                      <TableCell>
+              <div className="space-y-2">
+                {rankingLojas.slice(0, 5).map((loja, index) => (
+                  <div key={loja.id} className={`p-4 rounded-lg border-2 ${
+                    index === 0 ? 'bg-yellow-50 border-yellow-300' :
+                    index === 1 ? 'bg-slate-100 border-slate-300' :
+                    index === 2 ? 'bg-orange-50 border-orange-300' :
+                    'bg-white border-slate-200'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`text-2xl font-bold ${
+                          index === 0 ? 'text-yellow-600' :
+                          index === 1 ? 'text-slate-600' :
+                          index === 2 ? 'text-orange-600' :
+                          'text-slate-400'
+                        }`}>
+                          {index + 1}º
+                        </div>
+                        <div>
+                          <div className="font-semibold text-slate-800">{loja.nome_loja}</div>
+                          <div className="text-sm text-slate-600">{loja.firm_orders} FO • {loja.test_drives} TD</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-slate-900">{loja.pontuacao}</div>
                         <SemaforoBadge status={loja.status} size="sm" />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-sm text-slate-500 text-center py-8">
-                Nenhuma meta cadastrada para este mês
+                Nenhuma meta cadastrada
               </p>
             )
           ) : (
             rankingVendedores.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Posição</TableHead>
-                    <TableHead>Vendedor</TableHead>
-                    <TableHead className="text-right">FO</TableHead>
-                    <TableHead className="text-right">Test Drives</TableHead>
-                    <TableHead className="text-right">Pontuação</TableHead>
-                    <TableHead className="text-right">% Meta</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rankingVendedores.map((vendedor, index) => (
-                    <TableRow key={vendedor.id}>
-                      <TableCell className="font-bold">{index + 1}º</TableCell>
-                      <TableCell className="font-medium">{vendedor.nome_vendedor}</TableCell>
-                      <TableCell className="text-right">{vendedor.firm_orders}</TableCell>
-                      <TableCell className="text-right">{vendedor.test_drives}</TableCell>
-                      <TableCell className="text-right font-bold">{vendedor.pontuacao}</TableCell>
-                      <TableCell className="text-right">{vendedor.percentual_meta.toFixed(1)}%</TableCell>
-                      <TableCell>
+              <div className="space-y-2">
+                {rankingVendedores.slice(0, 5).map((vendedor, index) => (
+                  <div key={vendedor.id} className={`p-4 rounded-lg border-2 ${
+                    index === 0 ? 'bg-yellow-50 border-yellow-300' :
+                    index === 1 ? 'bg-slate-100 border-slate-300' :
+                    index === 2 ? 'bg-orange-50 border-orange-300' :
+                    'bg-white border-slate-200'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`text-2xl font-bold ${
+                          index === 0 ? 'text-yellow-600' :
+                          index === 1 ? 'text-slate-600' :
+                          index === 2 ? 'text-orange-600' :
+                          'text-slate-400'
+                        }`}>
+                          {index + 1}º
+                        </div>
+                        <div>
+                          <div className="font-semibold text-slate-800">{vendedor.nome_vendedor}</div>
+                          <div className="text-sm text-slate-600">{vendedor.firm_orders} FO • {vendedor.test_drives} TD</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-slate-900">{vendedor.pontuacao}</div>
                         <SemaforoBadge status={vendedor.status} size="sm" />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-sm text-slate-500 text-center py-8">
-                Nenhum vendedor ativo cadastrado
+                Nenhum vendedor ativo
               </p>
             )
           )}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gradient-to-br from-slate-50 to-slate-100">
         <CardHeader>
-          <CardTitle>Funil Comercial do Dia</CardTitle>
+          <CardTitle className="text-center">Funil do Dia</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Atendimentos</span>
-              <span className="text-lg font-bold">{data.atendimentosHoje}</span>
-            </div>
-            <div className="w-full bg-slate-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full"
-                style={{
-                  width: data.atendimentosHoje > 0 ? '100%' : '0%'
-                }}
-              ></div>
+          <div className="space-y-3">
+            <div className="bg-white p-4 rounded-lg border-2 border-blue-200">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-semibold text-blue-900">Atendimentos</span>
+                <span className="text-2xl font-bold text-blue-900">{data.atendimentosHoje}</span>
+              </div>
+              <div className="w-full bg-blue-100 rounded-full h-3">
+                <div className="bg-blue-600 h-3 rounded-full" style={{ width: '100%' }}></div>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Test Drives</span>
-              <span className="text-lg font-bold">{data.testDrivesHoje}</span>
-            </div>
-            <div className="w-full bg-slate-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full"
-                style={{
-                  width: data.atendimentosHoje > 0
-                    ? `${(data.testDrivesHoje / data.atendimentosHoje) * 100}%`
-                    : '0%'
-                }}
-              ></div>
+            <div className="bg-white p-4 rounded-lg border-2 border-purple-200">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-semibold text-purple-900">Test Drives</span>
+                <span className="text-2xl font-bold text-purple-900">{data.testDrivesHoje}</span>
+              </div>
+              <div className="w-full bg-purple-100 rounded-full h-3">
+                <div
+                  className="bg-purple-600 h-3 rounded-full transition-all"
+                  style={{
+                    width: data.atendimentosHoje > 0
+                      ? `${Math.min((data.testDrivesHoje / data.atendimentosHoje) * 100, 100)}%`
+                      : '0%'
+                  }}
+                ></div>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Firm Orders</span>
-              <span className="text-lg font-bold">{data.firmOrdersHoje}</span>
-            </div>
-            <div className="w-full bg-slate-200 rounded-full h-2">
-              <div
-                className="bg-green-600 h-2 rounded-full"
-                style={{
-                  width: data.testDrivesHoje > 0
-                    ? `${(data.firmOrdersHoje / data.testDrivesHoje) * 100}%`
-                    : '0%'
-                }}
-              ></div>
+            <div className="bg-white p-4 rounded-lg border-2 border-green-200">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-semibold text-green-900">Firm Orders</span>
+                <span className="text-2xl font-bold text-green-900">{data.firmOrdersHoje}</span>
+              </div>
+              <div className="w-full bg-green-100 rounded-full h-3">
+                <div
+                  className="bg-green-600 h-3 rounded-full transition-all"
+                  style={{
+                    width: data.testDrivesHoje > 0
+                      ? `${Math.min((data.firmOrdersHoje / data.testDrivesHoje) * 100, 100)}%`
+                      : '0%'
+                  }}
+                ></div>
+              </div>
             </div>
           </div>
         </CardContent>
