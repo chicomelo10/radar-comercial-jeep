@@ -2,12 +2,11 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, TrendingUp, Users, Phone, Calendar, UserCheck, ShoppingCart, Target, CircleAlert as AlertCircle, Filter, ClipboardCheck, CarFront, Handshake, CircleDollarSign, CreditCard, Award } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Phone, Target, CircleAlert as AlertCircle, CarFront, Award } from 'lucide-react';
 import { FonteBadge } from '@/components/dashboard/fonte-badge';
 
 type FonteProspeccao = {
@@ -22,6 +21,7 @@ type FunilData = {
   meta_vendas: number;
   meta_atendimentos: number;
   meta_agendamentos: number;
+  meta_test_drives: number;
   meta_ligacoes: number;
   meta_base_minima: number;
   base_prospeccao: number;
@@ -29,6 +29,7 @@ type FunilData = {
   ligacoes_sucesso: number;
   agendamentos_feitos: number;
   atendimentos_realizados: number;
+  test_drives_realizados: number;
   vendas_realizadas: number;
   taxa_conversao: number;
   taxa_comparecimento: number;
@@ -182,6 +183,7 @@ export default function FunilVendasPage() {
           meta_vendas: item.meta_vendas || 0,
           meta_atendimentos: item.meta_atendimentos || 0,
           meta_agendamentos: item.meta_agendamentos || 0,
+          meta_test_drives: item.meta_test_drives || 0,
           meta_ligacoes: item.meta_ligacoes || 0,
           meta_base_minima: item.meta_base_minima || 0,
           base_prospeccao: item.base_prospeccao || 0,
@@ -189,6 +191,7 @@ export default function FunilVendasPage() {
           ligacoes_sucesso: item.ligacoes_sucesso || 0,
           agendamentos_feitos: item.agendamentos_feitos || 0,
           atendimentos_realizados: item.atendimentos_realizados || 0,
+          test_drives_realizados: item.test_drives_realizados || 0,
           vendas_realizadas: item.vendas_realizadas || 0,
           taxa_conversao: item.taxa_real_conversao || 0.33,
           taxa_comparecimento: item.taxa_real_comparecimento || 0.30,
@@ -198,20 +201,22 @@ export default function FunilVendasPage() {
 
         setFunilData(funilFormatado);
       } else {
-        await criarMetricasPadrao();
+        criarMetricasPadrao();
       }
     } catch (error) {
       console.error('Erro ao carregar dados do funil:', error);
+      criarMetricasPadrao();
     } finally {
       setLoading(false);
     }
   };
 
-  const criarMetricasPadrao = async () => {
+  const criarMetricasPadrao = () => {
     const funilPadrao: FunilData = {
       meta_vendas: 10,
       meta_atendimentos: 30,
       meta_agendamentos: 100,
+      meta_test_drives: 15,
       meta_ligacoes: 333,
       meta_base_minima: 3333,
       base_prospeccao: 0,
@@ -219,6 +224,7 @@ export default function FunilVendasPage() {
       ligacoes_sucesso: 0,
       agendamentos_feitos: 0,
       atendimentos_realizados: 0,
+      test_drives_realizados: 0,
       vendas_realizadas: 0,
       taxa_conversao: 0.33,
       taxa_comparecimento: 0.30,
@@ -235,6 +241,7 @@ export default function FunilVendasPage() {
         meta_vendas: 0,
         meta_atendimentos: 0,
         meta_agendamentos: 0,
+        meta_test_drives: 0,
         meta_ligacoes: 0,
         meta_base_minima: 0,
         base_prospeccao: 0,
@@ -242,6 +249,7 @@ export default function FunilVendasPage() {
         ligacoes_sucesso: 0,
         agendamentos_feitos: 0,
         atendimentos_realizados: 0,
+        test_drives_realizados: 0,
         vendas_realizadas: 0,
         taxa_conversao: 0.33,
         taxa_comparecimento: 0.30,
@@ -250,23 +258,46 @@ export default function FunilVendasPage() {
       };
     }
 
-    const agregado = dados.reduce((acc, curr) => ({
-      meta_vendas: acc.meta_vendas + curr.meta_vendas,
-      meta_atendimentos: acc.meta_atendimentos + curr.meta_atendimentos,
-      meta_agendamentos: acc.meta_agendamentos + curr.meta_agendamentos,
-      meta_ligacoes: acc.meta_ligacoes + curr.meta_ligacoes,
-      meta_base_minima: acc.meta_base_minima + curr.meta_base_minima,
-      base_prospeccao: acc.base_prospeccao + curr.base_prospeccao,
-      ligacoes_realizadas: acc.ligacoes_realizadas + curr.ligacoes_realizadas,
-      ligacoes_sucesso: acc.ligacoes_sucesso + curr.ligacoes_sucesso,
-      agendamentos_feitos: acc.agendamentos_feitos + curr.agendamentos_feitos,
-      atendimentos_realizados: acc.atendimentos_realizados + curr.atendimentos_realizados,
-      vendas_realizadas: acc.vendas_realizadas + curr.vendas_realizadas,
-      taxa_conversao: curr.taxa_conversao,
-      taxa_comparecimento: curr.taxa_comparecimento,
-      taxa_agendamento: curr.taxa_agendamento,
-      taxa_contato: curr.taxa_contato,
-    }));
+    const agregado = dados.reduce(
+      (acc, curr) => ({
+        meta_vendas: acc.meta_vendas + curr.meta_vendas,
+        meta_atendimentos: acc.meta_atendimentos + curr.meta_atendimentos,
+        meta_agendamentos: acc.meta_agendamentos + curr.meta_agendamentos,
+        meta_test_drives: acc.meta_test_drives + curr.meta_test_drives,
+        meta_ligacoes: acc.meta_ligacoes + curr.meta_ligacoes,
+        meta_base_minima: acc.meta_base_minima + curr.meta_base_minima,
+        base_prospeccao: acc.base_prospeccao + curr.base_prospeccao,
+        ligacoes_realizadas: acc.ligacoes_realizadas + curr.ligacoes_realizadas,
+        ligacoes_sucesso: acc.ligacoes_sucesso + curr.ligacoes_sucesso,
+        agendamentos_feitos: acc.agendamentos_feitos + curr.agendamentos_feitos,
+        atendimentos_realizados: acc.atendimentos_realizados + curr.atendimentos_realizados,
+        test_drives_realizados: acc.test_drives_realizados + curr.test_drives_realizados,
+        vendas_realizadas: acc.vendas_realizadas + curr.vendas_realizadas,
+        taxa_conversao: curr.taxa_conversao,
+        taxa_comparecimento: curr.taxa_comparecimento,
+        taxa_agendamento: curr.taxa_agendamento,
+        taxa_contato: curr.taxa_contato,
+      }),
+      {
+        meta_vendas: 0,
+        meta_atendimentos: 0,
+        meta_agendamentos: 0,
+        meta_test_drives: 0,
+        meta_ligacoes: 0,
+        meta_base_minima: 0,
+        base_prospeccao: 0,
+        ligacoes_realizadas: 0,
+        ligacoes_sucesso: 0,
+        agendamentos_feitos: 0,
+        atendimentos_realizados: 0,
+        test_drives_realizados: 0,
+        vendas_realizadas: 0,
+        taxa_conversao: 0.33,
+        taxa_comparecimento: 0.30,
+        taxa_agendamento: 0.30,
+        taxa_contato: 0.10,
+      }
+    );
 
     const totalAtendimentos = agregado.atendimentos_realizados;
     const totalAgendamentos = agregado.agendamentos_feitos;
@@ -294,13 +325,6 @@ export default function FunilVendasPage() {
   const calcularProgresso = (realizado: number, meta: number) => {
     if (meta === 0) return 0;
     return Math.min((realizado / meta) * 100, 100);
-  };
-
-  const getProgressColor = (progresso: number) => {
-    if (progresso >= 100) return 'bg-green-500';
-    if (progresso >= 70) return 'bg-blue-500';
-    if (progresso >= 40) return 'bg-yellow-500';
-    return 'bg-red-500';
   };
 
   if (loading) {
@@ -341,13 +365,16 @@ export default function FunilVendasPage() {
             <label className="text-sm font-medium text-slate-700 mb-2 block">
               Filtrar por Loja
             </label>
-            <Select value={lojaFiltro} onValueChange={(value) => {
-              setLojaFiltro(value);
-              setVendedorFiltro('todos');
-              if (value !== 'todas') {
-                loadVendedoresPorLoja(value);
-              }
-            }}>
+            <Select
+              value={lojaFiltro}
+              onValueChange={(value) => {
+                setLojaFiltro(value);
+                setVendedorFiltro('todos');
+                if (value !== 'todas') {
+                  loadVendedoresPorLoja(value);
+                }
+              }}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -411,7 +438,7 @@ export default function FunilVendasPage() {
             Visão Geral do Funil
             {fonteFiltro !== 'todas' && (
               <span className="text-sm font-normal text-slate-600">
-                - {fontes.find(f => f.id === fonteFiltro)?.nome_fonte}
+                - {fontes.find((f) => f.id === fonteFiltro)?.nome_fonte}
               </span>
             )}
           </CardTitle>
@@ -427,13 +454,21 @@ export default function FunilVendasPage() {
             <div className="text-sm text-slate-600 bg-white rounded-lg p-4 border border-slate-200">
               <p className="font-medium mb-2">Funil Simplificado:</p>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-300">Prospecção</Badge>
+                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-300">
+                  Prospecção
+                </Badge>
                 <ArrowRight className="h-4 w-4 text-slate-400 self-center" />
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">Atendimentos</Badge>
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+                  Atendimentos
+                </Badge>
                 <ArrowRight className="h-4 w-4 text-slate-400 self-center" />
-                <Badge variant="outline" className="bg-violet-50 text-violet-700 border-violet-300">Test Drives</Badge>
+                <Badge variant="outline" className="bg-violet-50 text-violet-700 border-violet-300">
+                  Test Drives
+                </Badge>
                 <ArrowRight className="h-4 w-4 text-slate-400 self-center" />
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">Firm Orders</Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+                  Firm Orders
+                </Badge>
               </div>
               <p className="text-xs text-slate-500 mt-2">Captação de usado não faz parte do funil</p>
             </div>
@@ -441,7 +476,7 @@ export default function FunilVendasPage() {
             <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 items-center">
               <FunilEtapa
                 icon={<Phone className="h-5 w-5" />}
-                titulo="Prospeccao"
+                titulo="Prospecção"
                 subtitulo="Ativa + Passiva"
                 meta={dadosAgregados.meta_ligacoes}
                 realizado={dadosAgregados.ligacoes_sucesso}
@@ -471,8 +506,8 @@ export default function FunilVendasPage() {
                 icon={<CarFront className="h-5 w-5" />}
                 titulo="Test Drives"
                 subtitulo=""
-                meta={dadosAgregados.meta_agendamentos}
-                realizado={dadosAgregados.agendamentos_feitos}
+                meta={dadosAgregados.meta_test_drives}
+                realizado={dadosAgregados.test_drives_realizados}
                 cor="violet"
                 descricao="Realizados"
               />
@@ -548,8 +583,10 @@ export default function FunilVendasPage() {
               </div>
               <div className="text-sm text-slate-600">
                 {dadosAgregados.ligacoes_realizadas} ligações realizadas
-                ({dadosAgregados.ligacoes_realizadas > 0 ?
-                  ((dadosAgregados.ligacoes_sucesso / dadosAgregados.ligacoes_realizadas) * 100).toFixed(0) : 0}% sucesso)
+                ({dadosAgregados.ligacoes_realizadas > 0
+                  ? ((dadosAgregados.ligacoes_sucesso / dadosAgregados.ligacoes_realizadas) * 100).toFixed(0)
+                  : 0}
+                % sucesso)
               </div>
             </div>
           </CardContent>
@@ -663,7 +700,7 @@ export default function FunilVendasPage() {
                       {item.vendas_realizadas}/{item.meta_vendas} vendas
                     </Badge>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3 text-sm">
+                  <div className="grid grid-cols-2 md:grid-cols-7 gap-3 text-sm">
                     <div>
                       <p className="text-slate-600">Base</p>
                       <p className="font-semibold">{item.base_prospeccao}/{item.meta_base_minima}</p>
@@ -679,6 +716,10 @@ export default function FunilVendasPage() {
                     <div>
                       <p className="text-slate-600">Atendimentos</p>
                       <p className="font-semibold">{item.atendimentos_realizados}/{item.meta_atendimentos}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600">Test Drives</p>
+                      <p className="font-semibold">{item.test_drives_realizados}/{item.meta_test_drives}</p>
                     </div>
                     <div>
                       <p className="text-slate-600">Vendas</p>
@@ -706,9 +747,9 @@ function FunilEtapa({
   meta,
   realizado,
   cor,
-  descricao
+  descricao,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   titulo: string;
   subtitulo?: string;
   meta: number;
